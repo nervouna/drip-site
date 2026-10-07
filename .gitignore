@@ -1,0 +1,5 @@
+tools/.venv/
+tools/fonts/
+tools/qa/
+tools/headings.json
+__pycache__/
