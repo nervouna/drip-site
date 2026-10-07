@@ -29,7 +29,7 @@ export function metadata(lang, title, description, path, kind = 'landing') {
 <title>${esc(title)}</title><meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${origin}${path}">
 ${kind === 'privacy' ? '' : `<link rel="alternate" hreflang="en" href="${origin}/${pair}"><link rel="alternate" hreflang="zh-Hans" href="${origin}/zh-Hans/${pair}"><link rel="alternate" hreflang="x-default" href="${origin}/${pair}">`}
-<meta property="og:type" content="website"><meta property="og:site_name" content="Drip"><meta property="og:locale" content="${lang === 'en' ? 'en_US' : 'zh_CN'}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${origin}${path}"><meta property="og:image" content="${origin}${og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${esc(title)}">
+<meta property="og:type" content="website"><meta property="og:site_name" content="${lang === 'en' ? 'Drip' : '点滴记账'}"><meta property="og:locale" content="${lang === 'en' ? 'en_US' : 'zh_CN'}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${origin}${path}"><meta property="og:image" content="${origin}${og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${esc(title)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${origin}${og}">
 <meta name="theme-color" content="#F7F7F5" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="stylesheet" href="/style.css">
@@ -63,7 +63,7 @@ for (const [lang, c] of Object.entries(copy)) {
   }
 }
 const zh = copy['zh-Hans'];
-fs.writeFileSync('tools/headings.json', JSON.stringify({'zh-landing': [zh.h1,...zh.features.map(x=>x[0]),zh.support].join(''), 'zh-guide':[zh.guideTitle,...zh.items.map(x=>x[0])].join('')}));
+fs.writeFileSync('tools/headings.json', JSON.stringify({'zh-landing': [zh.brand,zh.h1,...zh.features.map(x=>x[0]),zh.support].join(''), 'zh-guide':[zh.brand,zh.guideTitle,...zh.items.map(x=>x[0])].join('')}));
 execFileSync('tools/.venv/bin/python', ['tools/fonts.py','tools/headings.json'], {stdio:'inherit'});
 // Preserve the policy's body verbatim; only its head is regenerated.
 const policy = fs.readFileSync('privacy.html','utf8');
