@@ -26,7 +26,7 @@ export const copy = {
       ['Can you see my data?', 'No. Your data stays on your iPhone (and in your own iCloud when sync is on). The developer runs no servers and has no access to it.'],
       ['How do I add widgets?', 'Touch and hold the Home Screen, tap Edit › Add Widget, then search for Drip.'],
     ],
-    more: 'More in the Guide', guideTitle: 'Guide',
+    more: 'More in the Guide', guideTitle: 'Guide', guideDescription: 'Set up templates, the app icon menu, widgets and more.',
     items: [
       ['Templates', 'Open Settings › Templates and tap + to create one, then tap ✓ to save. Tap a template to edit it, or tap Edit and drag to reorder. To use one, tap the Templates button at the top of Ledger.'],
       ['App icon', 'Touch and hold the Drip app icon to choose New Entry or one of your first three templates. Reorder templates in Settings › Templates to change which ones appear.'],
@@ -57,7 +57,7 @@ export const copy = {
       ['开发者能看到我的数据吗？', '不能。你的数据只保存在你的iPhone上（开启同步时也在你自己的iCloud中）。开发者没有任何服务器，也无法访问你的数据。'],
       ['如何添加小组件？', '长按主屏幕空白处，轻点 编辑 › 添加小组件，然后搜索Drip。'],
     ],
-    more: '更多使用说明见指南', guideTitle: '使用指南',
+    more: '更多使用说明见指南', guideTitle: '使用指南', guideDescription: '模板、图标快捷菜单、小组件等功能的设置方法。',
     items: [
       ['模板', '打开 设置 › 模板，轻点 + 新建，再轻点 ✓ 保存。轻点模板可以编辑；轻点「编辑」后拖动可调整顺序。记账时，轻点明细页顶部的模板按钮即可使用。'],
       ['App图标', '长按Drip应用图标，选择「记一笔」或前三个模板之一。在 设置 › 模板 中调整顺序，可以更换显示的模板。'],
