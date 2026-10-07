@@ -11,7 +11,7 @@ for (const [lang,c] of Object.entries(copy)) {
     const title = kind === 'landing' ? c.h1 : kind === 'guide' ? c.guideTitle : 'Privacy Policy';
     await browser.call('Page.navigate',{url:`http://127.0.0.1:8765/${lang === 'en' ? '' : 'zh-Hans/'}${kind === 'guide' ? 'guide/' : ''}`});
     await wait(200);
-    await browser.evaluate(`document.body.innerHTML = ${JSON.stringify(`<main style="width:1200px;height:630px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 130px;text-align:center;gap:36px"><img src="/assets/img/icon@2x.png" width="112" height="112" alt=""><h1 style="font-size:56px;margin:0">${title.replace(/([。！？]|[.!?])$/, m => `<span class="hang-${/[。！？]/.test(m) ? 'cjk' : 'latin'}">${m}</span>`)}</h1></main>`)}; document.fonts.ready`);
+    await browser.evaluate(`document.body.innerHTML = ${JSON.stringify(`<main style="width:1200px;height:630px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 130px;text-align:center;gap:36px"><img src="/assets/img/icon@2x.png" width="112" height="112" alt=""><p class="brand" style="display:block;font-size:30px;margin:-12px 0 0;color:var(--secondary)">${c.brand}</p><h1 style="font-size:56px;margin:0">${title.replace(/([。！？]|[.!?])$/, m => `<span class="hang-${/[。！？]/.test(m) ? 'cjk' : 'latin'}">${m}</span>`)}</h1></main>`)}; document.fonts.ready`);
     await browser.evaluate('Promise.all([...document.images].map(i=>i.decode()))');
     const image = await browser.call('Page.captureScreenshot',{format:'png'});
     fs.writeFileSync(`assets/img/og-${lang}-${kind}.png`,Buffer.from(image.data,'base64'));

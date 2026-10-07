@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { copy, languages, screens, featureScreens, guideIds, guideScreens } from './copy.mjs';
 const esc = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const origin = 'https://drip.damao.io';
@@ -32,14 +33,24 @@ ${kind === 'privacy' ? '' : `<link rel="alternate" hreflang="en" href="${origin}
 <meta property="og:type" content="website"><meta property="og:site_name" content="${lang === 'en' ? 'Drip' : '点滴记账'}"><meta property="og:locale" content="${lang === 'en' ? 'en_US' : 'zh_CN'}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${origin}${path}"><meta property="og:image" content="${origin}${og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${esc(title)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${origin}${og}">
 <meta name="theme-color" content="#F7F7F5" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="stylesheet" href="/style.css">
-${lang === 'zh-Hans' ? `<link rel="stylesheet" href="/assets/fonts/zh-${kind}.css">` : ''}`;
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="stylesheet" href="/style.css?v=${version('style.css')}">
+${lang === 'zh-Hans' ? `<link rel="stylesheet" href="/assets/fonts/zh-${kind}.css?v=${version(`assets/fonts/zh-${kind}.css`)}">` : ''}`;
 }
 function picture(lang, screen, alt, eager = false) {
   const base = `/assets/screens/${lang}/${screen}`;
   return `<picture><source type="image/webp" srcset="${base}@1x.webp 1x, ${base}@2x.webp 2x"><img class="phone" src="${base}@1x.png" srcset="${base}@1x.png 1x, ${base}@2x.png 2x" width="300" height="652" alt="${esc(alt)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async"></picture>`;
 }
 const icon = size => `<img src="/assets/img/icon@2x.png" width="${size}" height="${size}" alt="">`;
+const zh = copy['zh-Hans'];
+fs.writeFileSync('tools/headings.json', JSON.stringify({'zh-landing': [zh.brand,zh.h1,...zh.features.map(x=>x[0]),zh.support].join(''), 'zh-guide':[zh.brand,zh.guideTitle,...zh.items.map(x=>x[0])].join('')}));
+execFileSync('tools/.venv/bin/python', ['tools/fonts.py','tools/headings.json'], {stdio:'inherit'});
+// GitHub Pages caches assets for 10 minutes, so stylesheet and font URLs carry a content hash:
+// after a copy change, browsers fetch the new subsets right away instead of mixing in stale ones.
+const version = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 10);
+const stamp = (file, asset) => fs.writeFileSync(file, fs.readFileSync(file, 'utf8')
+  .replace(new RegExp(`(/assets/fonts/${asset})(\\?v=[0-9a-f]+)?`, 'g'), `$1?v=${version(`assets/fonts/${asset}`)}`));
+for (const page of ['zh-landing', 'zh-guide']) stamp(`assets/fonts/${page}.css`, `${page}.woff2`);
+stamp('style.css', 'newsreader-latin.woff2');
 for (const [lang, c] of Object.entries(copy)) {
   const root = lang === 'en' ? '/' : '/zh-Hans/';
   const other = lang === 'en' ? '/zh-Hans/' : '/';
@@ -62,9 +73,6 @@ for (const [lang, c] of Object.entries(copy)) {
     fs.writeFileSync(file, `<!doctype html>\n<html lang="${lang}"><head>${metadata(lang,title,guide ? c.guideDescription : c.sub,path,kind)}</head><body>${nav}${content}${footer}</body></html>\n`);
   }
 }
-const zh = copy['zh-Hans'];
-fs.writeFileSync('tools/headings.json', JSON.stringify({'zh-landing': [zh.brand,zh.h1,...zh.features.map(x=>x[0]),zh.support].join(''), 'zh-guide':[zh.brand,zh.guideTitle,...zh.items.map(x=>x[0])].join('')}));
-execFileSync('tools/.venv/bin/python', ['tools/fonts.py','tools/headings.json'], {stdio:'inherit'});
 // Preserve the policy's body verbatim; only its head is regenerated.
 const policy = fs.readFileSync('privacy.html','utf8');
 fs.writeFileSync('privacy.html', policy.replace(/<head>[\s\S]*?<\/head>/, `<head>${metadata('en','Privacy Policy – Drip',"Drip doesn't collect any data.",'/privacy.html','privacy')}</head>`));

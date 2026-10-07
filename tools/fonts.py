@@ -8,7 +8,8 @@ from fontTools.varLib.instancer import instantiateVariableFont
 
 
 def build(source, target, chars, axes):
-    font = instantiateVariableFont(TTFont(source), axes, inplace=True)
+    # Keep the source's head.modified so identical input gives byte-identical output.
+    font = instantiateVariableFont(TTFont(source, recalcTimestamp=False), axes, inplace=True)
     options = subset.Options()
     options.layout_features = ['*']  # Retain halt punctuation alternates.
     worker = subset.Subsetter(options=options)
