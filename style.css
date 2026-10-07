@@ -23,3 +23,5 @@ h1, h2, h3 { text-wrap: balance; }
 @media (min-width: 1540px) {
   .gallery { justify-content: center; padding-inline: 24px; scroll-snap-type: none; }
 }
+/* Share thumbnail for WeChat (see shareThumb in tools/pages.mjs): loaded, not shown. */
+.share-thumb { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
