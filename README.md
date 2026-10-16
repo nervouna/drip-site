@@ -21,6 +21,8 @@ changing it are in `CLAUDE.md`.
 - `tools/fonts.py`: builds the heading font subsets into `assets/fonts` (with OFL licenses);
   `tools/font-report.json` lists each subset's characters and size.
 - `tools/qa.mjs`, `tools/cdp.mjs`: browser checks over the Chrome DevTools protocol.
+- `tools/serve.py`: local preview server. `python3 -m http.server`'s listen backlog of 5 makes
+  Chrome reset parallel image loads, which fails the QA.
 - `assets/img`: app icon, share cards, `share-square.jpg` (see Sharing), and Apple's App Store
   badges (see `CLAUDE.md` › App Store badge).
 - `tools/qa/`, `tools/.venv/`, `tools/fonts/`: local, ignored.
@@ -75,7 +77,7 @@ bilingual pages have en, zh-Hans and x-default alternates.
 ## Preview and QA
 
 ```sh
-python3 -m http.server 8765
+python3 tools/serve.py
 ```
 
 In another terminal, start an isolated headless Chrome and keep it running:
@@ -99,8 +101,9 @@ git diff --check
 `qa.mjs` checks the five pages at 320, 375, 390, 430, 768, 1024 and 1440 px in light and dark:
 no page overflow, four full gallery phones and part of a fifth at 1440 px, working disclosures,
 every link, anchor, image and font (including PNG/2× fallbacks and share metadata), and no
-console errors, HTTP failures or external requests. It saves 20 full-page captures and page
-weights to `tools/qa/`. Chrome has no New York, so it renders the Newsreader fallback.
+console errors, HTTP failures or external requests. Links to other hosts (the App Store) are
+listed but not fetched; open them by hand when they change. It saves 20 full-page captures
+and page weights to `tools/qa/`. Chrome has no New York, so it renders the Newsreader fallback.
 
 ## Deploy
 
