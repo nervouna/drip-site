@@ -25,3 +25,12 @@ h1, h2, h3 { text-wrap: balance; }
 }
 /* Share thumbnail for WeChat (see shareThumb in tools/pages.mjs): loaded, not shown. */
 .share-thumb { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+/* Apple's "Download on the App Store" badge, unaltered: black on light, Apple's white variant on
+   dark (a <picture> source). 48px tall (Apple's onscreen minimum is 40px); the clear space Apple
+   asks for, a quarter of the height (12px), is kept by the margins around it. */
+.badge { display: inline-flex; vertical-align: top; }
+.badge img { display: block; width: auto; height: 48px; }
+.closing .badge { margin-bottom: 24px; }
+/* Apple's trademark credit, required wherever the badge is used, on a footer row of its own. */
+.footer { flex-wrap: wrap; }
+.footer .legal { flex-basis: 100%; }

@@ -21,7 +21,8 @@ changing it are in `CLAUDE.md`.
 - `tools/fonts.py`: builds the heading font subsets into `assets/fonts` (with OFL licenses);
   `tools/font-report.json` lists each subset's characters and size.
 - `tools/qa.mjs`, `tools/cdp.mjs`: browser checks over the Chrome DevTools protocol.
-- `assets/img`: app icon, share cards, and `share-square.jpg` (see Sharing).
+- `assets/img`: app icon, share cards, `share-square.jpg` (see Sharing), and Apple's App Store
+  badges (see `CLAUDE.md` › App Store badge).
 - `tools/qa/`, `tools/.venv/`, `tools/fonts/`: local, ignored.
 
 ## Build

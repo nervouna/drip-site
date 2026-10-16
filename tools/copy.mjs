@@ -9,7 +9,8 @@ export const copy = {
     title: 'Drip – Expense Tracker for iPhone', guide: 'Guide', support: 'Support', language: '中文', privacy: 'Privacy Policy', brand: 'Drip', copyright: '© 2026 Xiaoyu Guan',
     h1: 'A clean, efficient expense tracker for iPhone.',
     sub: 'Log an expense in two taps. No account, no ads.',
-    capsule: 'Coming soon to the App Store',
+    badge: 'Download on the App Store',
+    trademarks: 'Apple, the Apple logo and iPhone are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc.',
     captions: ['Enter an amount', 'See the month', 'Where it went', 'Templates for the usual', 'Log from the Home Screen'],
     features: [
       ['Log it from your Home Screen', 'Touch and hold the Drip icon to pick one of your first three templates, or tap a category in the Quick Categories widget. The entry opens already filled in. On the Lock Screen, Quick Add starts a new one.'],
@@ -41,6 +42,7 @@ export const copy = {
     title: '点滴记账 – 简单账本', guide: '指南', support: '帮助', language: 'English', privacy: '隐私政策', brand: '点滴记账', copyright: '© 2026 Xiaoyu Guan',
     h1: '清爽、高效的iPhone记账应用',
     sub: '轻点两下，完成记账。无需注册，没有广告。', capsule: '即将登陆App Store',
+    trademarks: 'Apple、Apple标志和iPhone是Apple Inc.在美国和其他国家或地区注册的商标。App Store是Apple Inc.的服务商标。',
     captions: ['输入金额', '按月查看', '钱花去哪', '常用模板', '在主屏幕记账'],
     features: [
       ['在主屏幕上记账', '长按点滴记账图标，可以直接选用前三个模板；也可以在「分类记账」小组件里点一个分类。打开时，内容已经填好。锁定屏幕上的「快速记账」可以直接开始记一笔。'],

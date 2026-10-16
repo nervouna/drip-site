@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { copy, languages, screens, featureScreens, guideIds, guideScreens } from './copy.mjs';
 const esc = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const origin = 'https://drip.damao.io';
+const appId = '6819748641';
 // Plain-text contexts (tab title, share previews) get no CSS text-autospace, so add the
 // CJK–Latin spaces here instead of writing them into the copy.
 const autospace = s => s.replace(/([\u4e00-\u9fff])([A-Za-z0-9])/g, '$1 $2').replace(/([A-Za-z0-9])([\u4e00-\u9fff])/g, '$1 $2');
@@ -33,7 +34,7 @@ ${kind === 'privacy' ? '' : `<link rel="alternate" hreflang="en" href="${origin}
 <meta property="og:type" content="website"><meta property="og:site_name" content="${lang === 'en' ? 'Drip' : '点滴记账'}"><meta property="og:locale" content="${lang === 'en' ? 'en_US' : 'zh_CN'}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${origin}${path}"><meta property="og:image" content="${origin}${og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${esc(title)}">
 <meta itemprop="name" content="${esc(title)}"><meta itemprop="description" content="${esc(description)}"><meta itemprop="image" content="${origin}/assets/img/share-square.jpg">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${origin}${og}">
-<meta name="theme-color" content="#F7F7F5" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
+${lang === 'en' && kind !== 'privacy' ? `<meta name="apple-itunes-app" content="app-id=${appId}">\n` : ''}<meta name="theme-color" content="#F7F7F5" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="stylesheet" href="/style.css?v=${version('style.css')}">
 ${lang === 'zh-Hans' ? `<link rel="stylesheet" href="/assets/fonts/zh-${kind}.css?v=${version(`assets/fonts/zh-${kind}.css`)}">` : ''}`;
 }
@@ -46,6 +47,10 @@ function picture(lang, screen, alt, eager = false) {
 // itemprop tags in the head. Keep this square image first, loaded but visually hidden.
 const shareThumb = '<div class="share-thumb" aria-hidden="true"><img src="/assets/img/share-square.jpg" width="400" height="400" alt=""></div>';
 const icon = size => `<img src="/assets/img/icon@2x.png" width="${size}" height="${size}" alt="">`;
+// Apple's badge artwork from App Store Marketing Tools, unaltered, shown 48px tall. The width
+// attributes keep each SVG's aspect ratio (en 119.66 × 40, zh-cn 108.85 × 40).
+const badgeWidth = {en: 144, 'zh-Hans': 131};
+const badge = (lang, alt) => `<a class="badge" href="https://apps.apple.com/app/id${appId}"><picture><source srcset="/assets/img/badge-${lang}-white.svg" media="(prefers-color-scheme: dark)"><img src="/assets/img/badge-${lang}-black.svg" width="${badgeWidth[lang]}" height="48" alt="${esc(autospace(alt))}"></picture></a>`;
 const zh = copy['zh-Hans'];
 fs.writeFileSync('tools/headings.json', JSON.stringify({'zh-landing': [zh.brand,zh.h1,...zh.features.map(x=>x[0]),zh.support].join(''), 'zh-guide':[zh.brand,zh.guideTitle,...zh.items.map(x=>x[0])].join('')}));
 execFileSync('tools/.venv/bin/python', ['tools/fonts.py','tools/headings.json'], {stdio:'inherit'});
@@ -64,14 +69,16 @@ for (const [lang, c] of Object.entries(copy)) {
     const path = root + (guide ? 'guide/' : '');
     const title = guide ? `${c.guideTitle} – ${c.brand}` : c.title;
     const nav = `<nav class="nav container"><a class="brand" href="${root}">${icon(32)}${c.brand}</a><a class="nav-secondary" href="${root}guide/">${c.guide}</a><a class="nav-secondary" href="${guide ? root : ''}#support">${c.support}</a><a href="${other}${guide ? 'guide/' : ''}" lang="${lang === 'en' ? 'zh-Hans' : 'en'}">${c.language}</a></nav>`;
-    const footer = `<footer class="footer container"><p><a href="${root}guide/">${c.guide}</a> · <a href="/privacy.html">${c.privacy}</a> · ${c.copyright}</p><a href="${other}${guide ? 'guide/' : ''}" lang="${lang === 'en' ? 'zh-Hans' : 'en'}">${c.language}</a></footer>`;
-    const capsule = `<p class="capsule">${c.capsule}</p>`;
+    const footer = `<footer class="footer container"><p><a href="${root}guide/">${c.guide}</a> · <a href="/privacy.html">${c.privacy}</a> · ${c.copyright}</p><a href="${other}${guide ? 'guide/' : ''}" lang="${lang === 'en' ? 'zh-Hans' : 'en'}">${c.language}</a>${c.badge && !guide ? `<p class="legal">${tail(c.trademarks)}</p>` : ''}</footer>`;
+    // The Chinese pages keep the "Coming soon" capsule (and get no Smart App Banner or trademark
+    // credit) until the app can be sold in mainland China, which waits for its ICP filing.
+    const store = c.badge ? badge(lang, c.badge) : `<p class="capsule">${c.capsule}</p>`;
     const content = guide
       ? `<main class="guide"><h1>${c.guideTitle}</h1><ul class="toc">${c.items.map(([h], i) => `<li><a href="#${guideIds[i]}">${h}</a></li>`).join('')}</ul>${c.items.map(([h, body], i) => `<section id="${guideIds[i]}"><h2>${h}</h2><p>${tail(esc(body))}</p>${guideScreens[i] ? picture(lang, guideScreens[i], h) : ''}</section>`).join('')}</main>`
-      : `<main><section class="hero"><h1>${hang(c.h1)}</h1><p class="sub">${tail(c.sub, true)}</p>${capsule}</section>
+      : `<main><section class="hero"><h1>${hang(c.h1)}</h1><p class="sub">${tail(c.sub, true)}</p>${store}</section>
 <div class="gallery" tabindex="0">${screens.map((screen, i) => `<figure>${picture(lang, screen, c.captions[i], true)}<figcaption>${c.captions[i]}</figcaption></figure>`).join('')}</div>
 <div class="features container">${c.features.map(([h, body], i) => `<section class="feature"><div class="feature-copy"><h2>${h}</h2><p>${tail(esc(body))}</p>${i === 0 ? `<a href="${root}guide/#app-icon">${c.setup}</a>` : ''}</div>${picture(lang, featureScreens[i], h)}</section>`).join('')}</div>
-<section class="closing">${icon(96)}${capsule}<p>${tail(c.free, true)}</p><p class="languages">${languages}</p></section>
+<section class="closing">${icon(96)}${store}<p>${tail(c.free, true)}</p><p class="languages">${languages}</p></section>
 <section class="support" id="support"><h2>${c.support}</h2><p>${tail(c.contact).replace('xiaoyuguan@hotmail.com', '<a href="mailto:xiaoyuguan@hotmail.com">xiaoyuguan@hotmail.com</a>')}</p><div class="faq">${c.faq.map(([q,a]) => `<details><summary>${q}</summary><p>${tail(esc(a))}</p></details>`).join('')}</div><a href="${root}guide/">${c.more}</a></section></main>`;
     const file = `.${path}index.html`;
     fs.mkdirSync(`.${path}`, {recursive:true});

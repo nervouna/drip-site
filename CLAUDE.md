@@ -42,8 +42,21 @@ mechanics, sharing, QA) is in `README.md`; read it first.
 - Don't remove `share-square.jpg` from the top of the pages or the `itemprop` tags: WeChat and
   QQ previews depend on them (README › Sharing).
 
-## At the App Store release
+## App Store badge
 
-Replace the "Coming soon" capsule with Apple's official badge linking to the App Store, in both
-languages, and add `<meta name="apple-itunes-app">`. After the app's store screenshots are
-retaken, regenerate the site's.
+- `assets/img/badge-*.svg` are Apple's "Download on the App Store" artwork, committed byte for
+  byte from App Store Marketing Tools
+  (`toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/{black,white}/{en-us,zh-cn}`).
+  Don't edit, recolor or crop them; replace them only with new files from that source.
+- Black badge on light, Apple's white variant on dark, 48px tall (Apple's onscreen minimum is
+  40px), with at least a quarter of its height as clear space. It links to
+  `https://apps.apple.com/app/id6819748641`.
+- The English landing footer carries Apple's trademark credit, which Apple requires wherever
+  the badge is used. Keep it while the badge is on the page.
+- English pages only, for now. The Chinese pages keep the "Coming soon" capsule, with no
+  `apple-itunes-app` meta or trademark credit, until the app can be sold in mainland China
+  (it waits for an ICP filing). Then switch them the same way: download the zh-cn badges from
+  the source above as `badge-zh-Hans-{black,white}.svg`, set `badge: '在App Store下载'` in place
+  of `capsule` in the zh-Hans copy (its `trademarks` line is already there), and drop the
+  `lang === 'en'` condition on the meta in `metadata()`.
+- After the app's store screenshots are retaken, regenerate the site's.
