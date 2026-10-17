@@ -20,7 +20,7 @@ export const copy = {
       ['Your data stays yours', 'No account, no ads, no servers. Your ledger is encrypted on your iPhone, and sync, if you turn it on, goes through your own iCloud. Lock Drip with Face ID, or export everything as a CSV file.'],
     ],
     setup: 'How to set it up', free: 'Free, for iPhone with iOS 26 or later.',
-    contact: 'If you have a question or a problem, email xiaoyuguan@hotmail.com. I usually reply within a few days.',
+    contact: 'If you have a question or a problem, email support@damao.io. I usually reply within a few days.',
     faq: [
       ['How do I sync between devices?', 'Turn on iCloud Sync in Settings › Privacy & Sync on each iPhone signed in to the same Apple Account. If Settings asks you to sign in, sign in to iCloud in the Settings app.'],
       ['How do I get my data out?', 'Go to Settings › Privacy & Sync › Export Data. All your entries are exported as a CSV file that you can share from the iOS share sheet.'],
@@ -52,7 +52,7 @@ export const copy = {
       ['数据只属于你', '无需注册，没有广告，也没有服务器。账本加密保存在你的iPhone上；开启同步后，只经过你自己的iCloud。还可以用面容ID锁定点滴记账，或把全部记录导出为CSV文件。'],
     ],
     setup: '设置方法', free: '免费，适用于iOS 26及以上的iPhone。',
-    contact: '有问题或建议，请发邮件至xiaoyuguan@hotmail.com，我通常会在几天内回复。',
+    contact: '有问题或建议，请发邮件至support@damao.io，我通常会在几天内回复。',
     faq: [
       ['如何在多台设备间同步？', '在登录同一Apple账户的每台iPhone上，打开 设置 › 隐私与同步 › iCloud同步。如果提示登录，请先在系统“设置”中登录iCloud。'],
       ['如何导出数据？', '前往 设置 › 隐私与同步 › 导出数据。所有记录会导出为CSV文件，可通过系统分享菜单发送。'],

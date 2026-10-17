@@ -79,7 +79,7 @@ for (const [lang, c] of Object.entries(copy)) {
 <div class="gallery" tabindex="0">${screens.map((screen, i) => `<figure>${picture(lang, screen, c.captions[i], true)}<figcaption>${c.captions[i]}</figcaption></figure>`).join('')}</div>
 <div class="features container">${c.features.map(([h, body], i) => `<section class="feature"><div class="feature-copy"><h2>${h}</h2><p>${tail(esc(body))}</p>${i === 0 ? `<a href="${root}guide/#app-icon">${c.setup}</a>` : ''}</div>${picture(lang, featureScreens[i], h)}</section>`).join('')}</div>
 <section class="closing">${icon(96)}${store}<p>${tail(c.free, true)}</p><p class="languages">${languages}</p></section>
-<section class="support" id="support"><h2>${c.support}</h2><p>${tail(c.contact).replace('xiaoyuguan@hotmail.com', '<a href="mailto:xiaoyuguan@hotmail.com">xiaoyuguan@hotmail.com</a>')}</p><div class="faq">${c.faq.map(([q,a]) => `<details><summary>${q}</summary><p>${tail(esc(a))}</p></details>`).join('')}</div><a href="${root}guide/">${c.more}</a></section></main>`;
+<section class="support" id="support"><h2>${c.support}</h2><p>${tail(c.contact).replace('support@damao.io', '<a href="mailto:support@damao.io">support@damao.io</a>')}</p><div class="faq">${c.faq.map(([q,a]) => `<details><summary>${q}</summary><p>${tail(esc(a))}</p></details>`).join('')}</div><a href="${root}guide/">${c.more}</a></section></main>`;
     const file = `.${path}index.html`;
     fs.mkdirSync(`.${path}`, {recursive:true});
     fs.writeFileSync(file, `<!doctype html>\n<html lang="${lang}"><head>${metadata(lang,title,guide ? c.guideDescription : c.sub,path,kind)}</head><body>${shareThumb}${nav}${content}${footer}</body></html>\n`);
