@@ -1,5 +1,7 @@
 # Drip website
 
+> **Archived.** The Drip website moved to https://damao.io/drip/ and drip.damao.io redirects there. Its source, with this repository's history merged in, now lives in the damao.io repository.
+
 Static GitHub Pages site for [drip.damao.io](https://drip.damao.io), the website of the Drip
 iPhone app (中文名「点滴记账」). This file describes how the site is built; the rules for
 changing it are in `CLAUDE.md`.
